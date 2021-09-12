@@ -436,7 +436,7 @@ class PHash(Hashing):
         super().__init__(verbose)
         self.__coefficient_extract = (8, 8)
         self.target_size = (32, 32)
-        print("Modified PHash Algo by Danish")
+        print("Modified PHash Algo by Danish S.")
 
     def _hash_algo(self, image_array):
         """
