@@ -3,6 +3,7 @@ from typing import List, Union, Tuple
 
 import numpy as np
 from PIL import Image
+import cv2
 
 from imagededup.utils.logger import return_logger
 
@@ -90,7 +91,7 @@ def expand_image_array_cnn(image_arr: np.ndarray) -> np.ndarray:
 
 
 def preprocess_image(
-    image, target_size: Tuple[int, int] = None, grayscale: bool = False
+    image, target_size: Tuple[int, int] = None, grayscale: bool = False, hsv: bool = False
 ) -> np.ndarray:
     """
     Take as input an image as numpy array or Pillow format. Returns an array version of optionally resized and grayed
@@ -115,10 +116,30 @@ def preprocess_image(
 
     if target_size:
         image_pil = image_pil.resize(target_size, Image.ANTIALIAS)
-
+    
+    if image_pil.mode != 'RGB':
+        # convert to RGBA first to avoid warning
+        # we ignore alpha channel if available
+        image_pil = image_pil.convert('RGBA').convert('RGB')
+    
+    temp1 = np.asarray(image_pil)
+    
+    if temp1.shape[-1]==1:
+        temp1 = np.squeeze(temp1, axis=-1)
+        
+    if len(temp1.shape) == 2:
+        temp1 = np.repeat(temp1[:,:,np.newaxis], 3, axis=2)
+    else:
+        temp1 = temp1[...,:3]
+    
+    image_pil = Image.fromarray(temp1)
+    
     if grayscale:
         image_pil = image_pil.convert('L')
-
+    
+    if hsv:
+        image_pil = image_pil.convert('HSV')
+        
     return np.array(image_pil).astype('uint8')
 
 
