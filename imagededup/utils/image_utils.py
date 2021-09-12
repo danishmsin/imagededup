@@ -151,6 +151,7 @@ def load_image(
     image_file: Union[PurePath, str],
     target_size: Tuple[int, int] = None,
     grayscale: bool = False,
+    hsv: bool = False,
     img_formats: List[str] = IMG_FORMATS,
 ) -> np.ndarray:
     """
