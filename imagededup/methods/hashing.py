@@ -6,6 +6,7 @@ from typing import Dict, List, Optional
 import pywt
 import numpy as np
 from scipy.fftpack import dct
+import cv2
 
 from imagededup.handlers.search.retrieval import HashEval
 from imagededup.utils.general_utils import get_files_to_remove, save_json, parallelise
@@ -107,13 +108,13 @@ class Hashing:
             if image_file and os.path.exists(image_file):
                 image_file = Path(image_file)
                 image_pp = load_image(
-                    image_file=image_file, target_size=self.target_size, grayscale=True
+                    image_file=image_file, target_size=self.target_size, grayscale=False
                 )
 
             elif isinstance(image_array, np.ndarray):
                 check_image_array_hash(image_array)  # Do sanity checks on array
                 image_pp = preprocess_image(
-                    image=image_array, target_size=self.target_size, grayscale=True
+                    image=image_array, target_size=self.target_size, grayscale=False
                 )
             else:
                 raise ValueError
@@ -445,19 +446,25 @@ class PHash(Hashing):
         Returns:
             A string representing the perceptual hash of the image.
         """
-        dct_coef = dct(dct(image_array, axis=0), axis=1)
+        hash_matrix = np.full((3,64),True, dtype=bool)
+        
+        for channel in range(len(image_array.shape)):
+            dct_coef = dct(dct(image_array[...,channel], axis=0), axis=1)
 
-        # retain top left 8 by 8 dct coefficients
-        dct_reduced_coef = dct_coef[
-            : self.__coefficient_extract[0], : self.__coefficient_extract[1]
-        ]
+            # retain top left 8 by 8 dct coefficients
+            dct_reduced_coef = dct_coef[
+                : self.__coefficient_extract[0], : self.__coefficient_extract[1]
+            ]
 
-        # median of coefficients excluding the DC term (0th term)
-        # mean_coef_val = np.mean(np.ndarray.flatten(dct_reduced_coef)[1:])
-        median_coef_val = np.median(np.ndarray.flatten(dct_reduced_coef)[1:])
+            # median of coefficients excluding the DC term (0th term)
+            # mean_coef_val = np.mean(np.ndarray.flatten(dct_reduced_coef)[1:])
+            median_coef_val = np.median(np.ndarray.flatten(dct_reduced_coef)[1:])
 
-        # return mask of all coefficients greater than mean of coefficients
-        hash_mat = dct_reduced_coef >= median_coef_val
+            # return mask of all coefficients greater than mean of coefficients
+            hash_matrix[channel,:] = dct_reduced_coef >= median_coef_val
+        
+        hash_mat = hash_matrix.flatten()
+        
         return hash_mat
 
 
