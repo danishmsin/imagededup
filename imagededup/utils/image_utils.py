@@ -91,7 +91,7 @@ def expand_image_array_cnn(image_arr: np.ndarray) -> np.ndarray:
 
 
 def preprocess_image(
-    image, target_size: Tuple[int, int] = None, grayscale: bool = False, hsv: bool = False
+    image, target_size: Tuple[int, int] = None, grayscale: bool = False, hsv: bool = False, color = (255,255,255)
 ) -> np.ndarray:
     """
     Take as input an image as numpy array or Pillow format. Returns an array version of optionally resized and grayed
@@ -120,7 +120,11 @@ def preprocess_image(
     if image_pil.mode != 'RGB':
         # convert to RGBA first to avoid warning
         # we ignore alpha channel if available
-        image_pil = image_pil.convert('RGBA').convert('RGB')
+        image_pil = image_pil.convert('RGBA')
+        image_pil.load()  # needed for split()
+        background = Image.new('RGB', image_pil.size, color)
+        background.paste(image_pil, mask=image_pil.split()[3])  # 3 is the alpha channel
+        image_pil = background
     
     temp1 = np.asarray(image_pil)
     
