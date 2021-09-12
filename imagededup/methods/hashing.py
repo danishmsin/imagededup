@@ -108,13 +108,13 @@ class Hashing:
             if image_file and os.path.exists(image_file):
                 image_file = Path(image_file)
                 image_pp = load_image(
-                    image_file=image_file, target_size=self.target_size, grayscale=False
+                    image_file=image_file, target_size=self.target_size, grayscale=False, hsv=True
                 )
 
             elif isinstance(image_array, np.ndarray):
-                check_image_array_hash(image_array)  # Do sanity checks on array
+                #check_image_array_hash(image_array)  # Do sanity checks on array
                 image_pp = preprocess_image(
-                    image=image_array, target_size=self.target_size, grayscale=False
+                    image=image_array, target_size=self.target_size, grayscale=False, hsv=True
                 )
             else:
                 raise ValueError
