@@ -432,9 +432,11 @@ class PHash(Hashing):
         Args:
             verbose: Display progress bar if True else disable it. Default value is True.
         """
+        
         super().__init__(verbose)
         self.__coefficient_extract = (8, 8)
         self.target_size = (32, 32)
+        print("Modified PHash Algo by Danish")
 
     def _hash_algo(self, image_array):
         """
