@@ -144,7 +144,7 @@ def preprocess_image(
     image_array_gray = np.asarray(image_pil_gray)
     image_array_hsv = np.asarray(image_pil_hsv)
     
-    image_pil = Image.fromarray(np.concatenate((image_array_hsv[...,0], image_array_gray),axis=0))
+    image_pil = Image.fromarray(np.concatenate((image_array_hsv[...,0], image_array_gray),axis=-1))
     
     return np.array(image_pil).astype('uint8')
 
