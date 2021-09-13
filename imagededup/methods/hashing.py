@@ -450,7 +450,7 @@ class PHash(Hashing):
         """
         hash_matrix = np.full((2,8,8),True, dtype=bool)
         
-        for channel in range(len(image_array.shape)):
+        for channel in range(image_array.shape[-1]):
             dct_coef = dct(dct(image_array[...,channel], axis=0), axis=1)
 
             # retain top left 8 by 8 dct coefficients
