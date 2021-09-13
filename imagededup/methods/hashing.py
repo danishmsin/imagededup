@@ -436,7 +436,7 @@ class PHash(Hashing):
         super().__init__(verbose)
         self.__coefficient_extract = (8, 8)
         self.target_size = (32, 32)
-        print("Modified PHash Algo by Danish S.")
+        print("Modified PHash Algo by Danish")
 
     def _hash_algo(self, image_array):
         """
@@ -448,7 +448,7 @@ class PHash(Hashing):
         Returns:
             A string representing the perceptual hash of the image.
         """
-        hash_matrix = np.full((3,8,8),True, dtype=bool)
+        hash_matrix = np.full((2,8,8),True, dtype=bool)
         
         for channel in range(len(image_array.shape)):
             dct_coef = dct(dct(image_array[...,channel], axis=0), axis=1)
@@ -465,7 +465,7 @@ class PHash(Hashing):
             # return mask of all coefficients greater than mean of coefficients
             hash_matrix[channel] = dct_reduced_coef >= median_coef_val
         
-        hash_mat = hash_matrix.reshape((24,8))
+        hash_mat = hash_matrix.reshape((16,8))
         
         return hash_mat
 
