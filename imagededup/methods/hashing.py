@@ -455,7 +455,7 @@ class PHash(Hashing):
 
             # retain top left 8 by 8 dct coefficients
             dct_reduced_coef = dct_coef[
-                : self.__coefficient_extract[0], : self.__coefficient_extract[1]
+                :self.__coefficient_extract[0], : self.__coefficient_extract[1]
             ]
 
             # median of coefficients excluding the DC term (0th term)
