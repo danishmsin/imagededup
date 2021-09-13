@@ -96,7 +96,7 @@ setup(
     long_description=long_description,
     license='Apache 2.0',
     install_requires=[
-        'tensorflow>1.0'.
+        'tensorflow>1.0',
         'Pillow>=8.3.0',
         'tqdm',
         'scikit-learn',
