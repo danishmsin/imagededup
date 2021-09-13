@@ -96,12 +96,16 @@ setup(
     long_description=long_description,
     license='Apache 2.0',
     install_requires=[
-        'tensorflow>1.0',
-        'Pillow>=8.0.0',
+        'tensorflow>1.0'.
+        'Pillow>=8.3.0',
         'tqdm',
         'scikit-learn',
         'PyWavelets~=1.1.1',
-        'matplotlib'
+        'matplotlib',
+        'scikit-image',
+        'sklearn',
+        'opencv-python',
+        'cython>=0.29'
     ],
     extras_require={
         'tests': ['pytest', 'pytest-cov', 'pytest-mock', 'codecov'],
