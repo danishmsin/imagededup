@@ -113,10 +113,7 @@ def preprocess_image(
         image_pil = image
     else:
         raise ValueError('Input is expected to be a numpy array or a pillow object!')
-
-    if target_size:
-        image_pil = image_pil.resize(target_size, Image.ANTIALIAS)
-    
+     
     if image_pil.mode != 'RGB':
         # convert to RGBA first to avoid warning
         # we ignore alpha channel if available
@@ -125,6 +122,9 @@ def preprocess_image(
         background = Image.new('RGB', image_pil.size, color)
         background.paste(image_pil, mask=image_pil.split()[3])  # 3 is the alpha channel
         image_pil = background
+        
+    if target_size:
+        image_pil = image_pil.resize(target_size, Image.ANTIALIAS)
     
     temp1 = np.asarray(image_pil)
     
@@ -138,12 +138,14 @@ def preprocess_image(
     
     image_pil = Image.fromarray(temp1)
     
-    if grayscale:
-        image_pil = image_pil.convert('L')
+    image_pil_gray = image_pil.convert('L')
+    image_pil_hsv = image_pil.convert('HSV')
     
-    if hsv:
-        image_pil = image_pil.convert('HSV')
-        
+    image_array_gray = np.asarray(image_pil_gray)
+    image_array_hsv = np.asarray(image_pil_hsv)
+    
+    image_pil = Image.fromarray(np.concatenate((image_array_hsv[...,0], image_array_gray),axis=0))
+    
     return np.array(image_pil).astype('uint8')
 
 
