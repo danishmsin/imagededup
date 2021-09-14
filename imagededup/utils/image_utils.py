@@ -6,7 +6,6 @@ from PIL import Image
 import cv2
 
 from imagededup.utils.logger import return_logger
-from skimage.color import rgb2hsv, rgb2gray
 
 IMG_FORMATS = ['JPEG', 'PNG', 'BMP', 'MPO', 'PPM', 'TIFF', 'GIF']
 logger = return_logger(__name__)
@@ -136,16 +135,17 @@ def preprocess_image(
     else:
         temp1 = temp1[...,:3]
     
-    temp_hsv = rgb2hsv(temp1)
-    temp_gray = rgb2gray(temp1)
+    image_pil = Image.fromarray(temp)
+    #temp_hsv = rgb2hsv(temp1)
+    #temp_gray = rgb2gray(temp1)
     
-    #image_pil_gray = image_pil.convert('L')
-    #image_pil_hsv = image_pil.convert('HSV')
+    image_pil_gray = image_pil.convert('L')
+    image_pil_hsv = image_pil.convert('HSV')
     
-    #image_array_gray = np.asarray(image_pil_gray)
-    #image_array_hsv = np.asarray(image_pil_hsv)
+    image_array_gray = np.asarray(image_pil_gray)
+    image_array_hsv = np.asarray(image_pil_hsv)
 
-    return  np.concatenate((temp_hsv[...,0,np.newaxis], temp_gray[...,np.newaxis]),axis=-1).astype('uint8')
+    return  np.concatenate((image_array_hsv[...,0,np.newaxis], image_array_gray[...,np.newaxis]),axis=-1).astype('uint8')
 
 
 def load_image(
