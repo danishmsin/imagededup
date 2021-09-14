@@ -140,13 +140,13 @@ def preprocess_image(
     #temp_gray = rgb2gray(temp1)
     
     image_pil_gray = image_pil.convert('L')
-    image_pil_hsv = image_pil.convert('HSV')
+    #image_pil_hsv = image_pil.convert('HSV')
     
     image_array_gray = np.asarray(image_pil_gray)
-    image_array_hsv = np.asarray(image_pil_hsv)
+    #image_array_hsv = np.asarray(image_pil_hsv)
 
-    return  np.concatenate((image_array_hsv[...,0,np.newaxis], image_array_gray[...,np.newaxis]),axis=-1).astype('uint8')
-
+    #return  np.concatenate((image_array_hsv[...,0,np.newaxis], image_array_gray[...,np.newaxis]),axis=-1).astype('uint8')
+    return image_array_gray.astype('uint8')
 
 def load_image(
     image_file: Union[PurePath, str],
