@@ -135,7 +135,7 @@ def preprocess_image(
     else:
         temp1 = temp1[...,:3]
     
-    image_pil = Image.fromarray(temp)
+    image_pil = Image.fromarray(temp1)
     #temp_hsv = rgb2hsv(temp1)
     #temp_gray = rgb2gray(temp1)
     
