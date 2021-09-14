@@ -448,6 +448,7 @@ class PHash(Hashing):
         Returns:
             A string representing the perceptual hash of the image.
         """
+        '''
         hash_matrix = np.full((2,8,8),True, dtype=bool)
         
         for channel in range(image_array.shape[-1]):
@@ -468,7 +469,22 @@ class PHash(Hashing):
         hash_mat = hash_matrix.reshape((16,8))
         
         return hash_mat
+        '''
+        dct_coef = dct(dct(image_array, axis=0), axis=1)
 
+        # retain top left 8 by 8 dct coefficients
+        dct_reduced_coef = dct_coef[
+            :self.__coefficient_extract[0], : self.__coefficient_extract[1]
+        ]
+
+        # median of coefficients excluding the DC term (0th term)
+        # mean_coef_val = np.mean(np.ndarray.flatten(dct_reduced_coef)[1:])
+        median_coef_val = np.median(np.ndarray.flatten(dct_reduced_coef)[1:])
+
+        # return mask of all coefficients greater than mean of coefficients
+        hash_mat = dct_reduced_coef >= median_coef_val
+        
+        return hash_mat
 
 class AHash(Hashing):
     """
