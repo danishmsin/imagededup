@@ -125,6 +125,7 @@ def preprocess_image(
     if target_size:
         image_pil = image_pil.resize(target_size, Image.ANTIALIAS)
     
+    '''
     temp1 = np.asarray(image_pil)
     
     if temp1.shape[-1]==1:
@@ -138,7 +139,7 @@ def preprocess_image(
     image_pil = Image.fromarray(temp1)
     #temp_hsv = rgb2hsv(temp1)
     #temp_gray = rgb2gray(temp1)
-    
+    '''
     image_pil_gray = image_pil.convert('L')
     #image_pil_hsv = image_pil.convert('HSV')
     
